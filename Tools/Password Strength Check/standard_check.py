@@ -28,18 +28,17 @@ def check_password_strength(password):
 
 
 def rate_password_strength(score):
-    if score == 0:
+    if score <= 1:
         return "Very Weak"
-    elif score == 1:
-        return "Weak"
     elif score == 2:
-        return "Moderate"
+        return "Weak"
     elif score == 3:
-        return "Strong"
+        return "Moderate"
     elif score == 4:
-        return "Very Strong"
+        return "Strong"
     else:
-        return "Invalid"
+        return "Very Strong"
+
 
 
 # Example usage

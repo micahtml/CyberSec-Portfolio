@@ -1,35 +1,26 @@
 import dpkt
 import socket
+from scapy.all import sniff
 
 
 def parse_packet(packet):
     eth = dpkt.ethernet.Ethernet(packet)  # Parse the Ethernet frame
     ip = eth.data  # Get the IP packet from the Ethernet frame
 
-    # Extract relevant information from the IP packet
-    src_ip = socket.inet_ntoa(ip.src)
-    dst_ip = socket.inet_ntoa(ip.dst)
-
     if isinstance(ip.data, dpkt.tcp.TCP):
         tcp = ip.data  # Get the TCP segment from the IP packet
-        src_port = tcp.sport
-        dst_port = tcp.dport
-        protocol = 'TCP'
-    elif isinstance(ip.data, dpkt.udp.UDP):
-        udp = ip.data  # Get the UDP datagram from the IP packet
-        src_port = udp.sport
-        dst_port = udp.dport
-        protocol = 'UDP'
-    else:
-        src_port = None
-        dst_port = None
-        protocol = 'Other'
+        payload = tcp.data
 
-    # Perform your analysis and threat detection logic here
-    print(
-        f"Source IP: {src_ip}, Destination IP: {dst_ip}, Protocol: {protocol}")
-    if src_port and dst_port:
-        print(f"Source Port: {src_port}, Destination Port: {dst_port}")
+        # Perform analysis and threat detection on the payload
+        if len(payload) > 0:
+            suspicious_keywords = ['password', 'admin', 'malware', 'hack']
+            for keyword in suspicious_keywords:
+                if keyword.encode() in payload:
+                    print("Suspicious payload detected!")
+                    print(
+                        f"Source IP: {socket.inet_ntoa(ip.src)}, Destination IP: {socket.inet_ntoa(ip.dst)}")
+                    print(f"Payload: {payload.decode()}")
+                    break
 
 
 def packet_handler(packet):
@@ -40,4 +31,4 @@ def packet_handler(packet):
 
 
 # Sniff packets on the network interface
-sniff(prn=packet_handler, filter="tcp or udp", count=10)
+sniff(prn=packet_handler, filter="tcp", count=10)

@@ -23,7 +23,8 @@ This is a simple tool built using Python that evaluates the strength of a passwo
 1. Open a terminal or command prompt.
 2. Navigate to the directory where the source code files are located.
 3. Run the following command to execute the program:
-
+'''python
+python password_strength_checker.py
 
 4. Enter the password when prompted.
 5. The program will display the password strength rating or any error messages if the password does not meet the requirements.

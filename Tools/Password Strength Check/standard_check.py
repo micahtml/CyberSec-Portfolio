@@ -40,9 +40,37 @@ def rate_password_strength(score):
         return "Very Strong"
 
 
+def check_password_requirements(password):
+    errors = []
+
+    # Check for uppercase letter
+    if not re.search(r"[A-Z]", password):
+        errors.append("Password must include an uppercase letter.")
+
+    # Check for lowercase letter
+    if not re.search(r"[a-z]", password):
+        errors.append("Password must include a lowercase letter.")
+
+    # Check for digit
+    if not re.search(r"\d", password):
+        errors.append("Password must include a digit.")
+
+    # Check for special character
+    if not re.search(r"\W", password):
+        errors.append("Password must include a special character.")
+
+    return errors
+
 
 # Example usage
 password = input("Enter your password: ")
-password_strength = check_password_strength(password)
-rating = rate_password_strength(password_strength)
-print("Password Strength: " + rating)
+
+requirements_errors = check_password_requirements(password)
+if requirements_errors:
+    print("Password does not meet the following requirements:")
+    for error in requirements_errors:
+        print("- " + error)
+else:
+    password_strength = check_password_strength(password)
+    rating = rate_password_strength(password_strength)
+    print("Password Strength: " + rating)

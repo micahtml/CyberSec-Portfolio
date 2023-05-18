@@ -26,6 +26,7 @@ This is a simple tool built using Python that evaluates the strength of a passwo
 
 ```python
 python password_strength_checker.py
+```
 
 4. Enter the password when prompted.
 5. The program will display the password strength rating or any error messages if the password does not meet the requirements.

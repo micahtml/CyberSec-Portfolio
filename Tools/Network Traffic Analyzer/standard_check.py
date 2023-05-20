@@ -1,35 +1,34 @@
-import dpkt
-import socket
-import scapy
-from scapy.all import sniff
+import pyshark
 
 
 def parse_packet(packet):
-    eth = dpkt.ethernet.Ethernet(packet)  # Parse the Ethernet frame
-    ip = eth.data  # Get the IP packet from the Ethernet frame
+    ip = packet.ip
+    src_ip = ip.src
+    dst_ip = ip.dst
 
-    if isinstance(ip.data, dpkt.tcp.TCP):
-        tcp = ip.data  # Get the TCP segment from the IP packet
-        payload = tcp.data
+    if hasattr(packet, 'tcp'):
+        transport_layer = packet.tcp
+        src_port = transport_layer.srcport
+        dst_port = transport_layer.dstport
+        protocol = 'TCP'
+    elif hasattr(packet, 'udp'):
+        transport_layer = packet.udp
+        src_port = transport_layer.srcport
+        dst_port = transport_layer.dstport
+        protocol = 'UDP'
+    else:
+        src_port = None
+        dst_port = None
+        protocol = 'Other'
 
-        # Perform analysis and threat detection on the payload
-        if len(payload) > 0:
-            suspicious_keywords = ['password', 'admin', 'malware', 'hack']
-            for keyword in suspicious_keywords:
-                if keyword.encode() in payload:
-                    print("Suspicious payload detected!")
-                    print(
-                        f"Source IP: {socket.inet_ntoa(ip.src)}, Destination IP: {socket.inet_ntoa(ip.dst)}")
-                    print(f"Payload: {payload.decode()}")
-                    break
+    # Perform your analysis and threat detection logic here
+    print(
+        f"Source IP: {src_ip}, Destination IP: {dst_ip}, Protocol: {protocol}")
+    if src_port and dst_port:
+        print(f"Source Port: {src_port}, Destination Port: {dst_port}")
 
 
-def packet_handler(packet):
-    try:
-        parse_packet(packet)
-    except dpkt.dpkt.UnpackError:
-        pass  # Ignore malformed packets
-
-
-# Sniff packets on the network interface
-sniff(prn=packet_handler, filter="tcp", count=10)
+capture = pyshark.LiveCapture(interface='eth0', bpf_filter='tcp or udp')
+capture.sniff(packet_count=10)
+for packet in capture:
+    parse_packet(packet)

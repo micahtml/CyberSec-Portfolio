@@ -78,6 +78,13 @@ def check_password():
         result_label.config(text="Password Strength: " + rating)
 
 
+def toggle_password_visibility():
+    if show_password.get():
+        entry.config(show="")
+    else:
+        entry.config(show="*")
+
+
 # Create the main window
 window = tk.Tk()
 window.title("Password Strength Checker")
@@ -85,6 +92,12 @@ window.title("Password Strength Checker")
 # Create and place the password entry field
 entry = tk.Entry(window, width=30, show="*")
 entry.pack(pady=10)
+
+# Create and place the "Show Password" checkbox
+show_password = tk.BooleanVar()
+show_password_checkbox = tk.Checkbutton(
+    window, text="Show Password", variable=show_password, command=toggle_password_visibility)
+show_password_checkbox.pack()
 
 # Create and place the check button
 check_button = tk.Button(window, text="Check Password", command=check_password)

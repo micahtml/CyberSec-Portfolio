@@ -1,4 +1,5 @@
 import re
+import tkinter as tk
 
 
 def check_password_strength(password):
@@ -62,15 +63,36 @@ def check_password_requirements(password):
     return errors
 
 
-# Example usage
-password = input("Enter your password: ")
+def check_password():
+    password = entry.get()
 
-requirements_errors = check_password_requirements(password)
-if requirements_errors:
-    print("Password does not meet the following requirements:")
-    for error in requirements_errors:
-        print("- " + error)
-else:
-    password_strength = check_password_strength(password)
-    rating = rate_password_strength(password_strength)
-    print("Password Strength: " + rating)
+    requirements_errors = check_password_requirements(password)
+    if requirements_errors:
+        error_text = "Password does not meet the following requirements:\n"
+        for error in requirements_errors:
+            error_text += "- " + error + "\n"
+        result_label.config(text=error_text)
+    else:
+        password_strength = check_password_strength(password)
+        rating = rate_password_strength(password_strength)
+        result_label.config(text="Password Strength: " + rating)
+
+
+# Create the main window
+window = tk.Tk()
+window.title("Password Strength Checker")
+
+# Create and place the password entry field
+entry = tk.Entry(window, width=30, show="*")
+entry.pack(pady=10)
+
+# Create and place the check button
+check_button = tk.Button(window, text="Check Password", command=check_password)
+check_button.pack()
+
+# Create and place the result label
+result_label = tk.Label(window, text="")
+result_label.pack(pady=10)
+
+# Start the main GUI event loop
+window.mainloop()

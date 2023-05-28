@@ -189,8 +189,9 @@ decrypted = private_key.decrypt(
 print(f'decrypted: \033[1;31m{utf8(decrypted)}\033[0m')
 
 def decrypt():
-    # Perform decryption using selected file and key
+    # Perform decryption using selected file and key?
     
+
 # Example usage:
 root = tk.Tk()
 button = tk.Button(root, text='Select File', command=select_file)

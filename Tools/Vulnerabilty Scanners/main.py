@@ -1,10 +1,7 @@
+from tkinter import Tk, Label, Entry, Button
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-
-# Target URLs to scan
-target_urls = ["http://example.com/login", "http://example.com/contact"]
 
 # Configure Firefox driver
 firefox_options = FirefoxOptions()
@@ -17,7 +14,9 @@ chrome_options.headless = True  # Run Chrome in headless mode
 chrome_driver = webdriver.Chrome(options=chrome_options)
 
 
-def scan_for_vulnerabilities(url):
+def scan_for_vulnerabilities():
+    url = entry.get()
+
     # Scan for SQL injection vulnerabilities
     sql_payload = "' OR '1'='1"
 
@@ -52,18 +51,33 @@ def scan_for_vulnerabilities(url):
 
     # Analyze response for XSS vulnerability
 
-    # Output vulnerability findings to the terminal
-    print(f"URL: {url}")
-    print("Vulnerabilities Found:")
-    # Output SQL injection vulnerabilities
-
-    # Output XSS vulnerabilities
-    print()
+    # Output vulnerability findings to the GUI
+    output_label.configure(
+        text=f"URL: {url}\n\nVulnerabilities Found:\n\n(SQL Injection)\n\n(XSS)")
 
 
-# Scan each target URL
-for url in target_urls:
-    scan_for_vulnerabilities(url)
+# Create the GUI window
+window = Tk()
+window.title("Vulnerability Scanner")
+
+# Input Label
+label = Label(window, text="Enter Target URL:")
+label.pack()
+
+# Input Entry
+entry = Entry(window)
+entry.pack()
+
+# Scan Button
+scan_button = Button(window, text="Scan", command=scan_for_vulnerabilities)
+scan_button.pack()
+
+# Output Label
+output_label = Label(window, text="")
+output_label.pack()
+
+# Run the GUI loop
+window.mainloop()
 
 # Clean up resources
 firefox_driver.quit()

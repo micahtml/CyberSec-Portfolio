@@ -20,28 +20,36 @@ chrome_driver = webdriver.Chrome(options=chrome_options)
 def scan_for_vulnerabilities(url):
     # Scan for SQL injection vulnerabilities
     sql_payload = "' OR '1'='1"
+
     # Send request to target URL using Firefox
     firefox_driver.get(url)
+
     # Inject payload into input fields
     input_elements = firefox_driver.find_elements_by_tag_name("input")
     for input_element in input_elements:
         input_element.send_keys(sql_payload)
+
     # Submit the form
     form_element = firefox_driver.find_element_by_tag_name("form")
     form_element.submit()
+
     # Analyze response for SQL injection vulnerability
 
     # Scan for XSS vulnerabilities
     xss_payload = "<script>alert('XSS')</script>"
+
     # Send request to target URL using Chrome
     chrome_driver.get(url)
+
     # Inject payload into input fields
     input_elements = chrome_driver.find_elements_by_tag_name("input")
     for input_element in input_elements:
         input_element.send_keys(xss_payload)
+
     # Submit the form
     form_element = chrome_driver.find_element_by_tag_name("form")
     form_element.submit()
+
     # Analyze response for XSS vulnerability
 
     # Output vulnerability findings to the terminal

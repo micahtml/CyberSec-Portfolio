@@ -8,6 +8,11 @@ firefox_options = FirefoxOptions()
 firefox_options.headless = True  # Run Firefox in headless mode
 firefox_driver = webdriver.Firefox(options=firefox_options)
 
+# Provide the path to the Firefox binary
+# Replace with the actual path to the Firefox binary
+firefox_binary_path = '/path/to/firefox/binary'
+firefox_options.binary = firefox_binary_path
+
 # Configure Chrome driver
 chrome_options = ChromeOptions()
 chrome_options.headless = True  # Run Chrome in headless mode
